@@ -1,97 +1,136 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Spike Face ID / Biometría
 
-# Getting Started
+Una aplicación de prueba (spike) para demostrar la funcionalidad de autenticación biométrica en React Native.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Características
 
-## Step 1: Start Metro
+- ✅ Autenticación con Face ID (iOS)
+- ✅ Autenticación con Touch ID (iOS)
+- ✅ Autenticación con huella dactilar (Android)
+- ✅ Interfaz moderna y responsive
+- ✅ Manejo de errores robusto
+- ✅ Verificación de disponibilidad de biometría
+- ✅ Creación automática de claves biométricas
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Tecnologías utilizadas
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- React Native 0.80.2
+- TypeScript
+- react-native-biometrics
+- React Navigation (para futuras expansiones)
 
-```sh
-# Using npm
-npm start
+## Estructura del proyecto
 
-# OR using Yarn
-yarn start
+```
+src/
+├── components/
+│   └── BiometricButton.tsx    # Componente reutilizable para autenticación
+├── screens/
+│   ├── LoginScreen.tsx        # Pantalla de login con biometría
+│   └── HomeScreen.tsx         # Pantalla principal después del login
+├── services/
+│   └── biometricService.ts    # Servicio para manejar biometría
+└── types/
+    └── index.ts              # Definiciones de tipos TypeScript
 ```
 
-## Step 2: Build and run your app
+## Instalación
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+1. Clona el repositorio
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
+
+3. Para iOS, instala los pods:
+   ```bash
+   cd ios && pod install && cd ..
+   ```
+
+## Configuración
 
 ### Android
 
-```sh
-# Using npm
-npm run android
+Los permisos necesarios ya están configurados en `android/app/src/main/AndroidManifest.xml`:
 
-# OR using Yarn
-yarn android
+```xml
+<uses-permission android:name="android.permission.USE_BIOMETRIC" />
+<uses-permission android:name="android.permission.USE_FINGERPRINT" />
 ```
 
 ### iOS
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+Para iOS, asegúrate de tener configurado Face ID o Touch ID en tu dispositivo/simulador.
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+## Uso
 
-```sh
-bundle install
-```
+1. Ejecuta la aplicación:
+   ```bash
+   # Para Android
+   npm run android
+   
+   # Para iOS
+   npm run ios
+   ```
 
-Then, and every time you update your native dependencies, run:
+2. La aplicación verificará automáticamente si la biometría está disponible en tu dispositivo.
 
-```sh
-bundle exec pod install
-```
+3. Si la biometría está disponible, verás un botón para iniciar sesión.
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+4. Toca el botón y usa tu Face ID, Touch ID o huella dactilar para autenticarte.
 
-```sh
-# Using npm
-npm run ios
+5. Una vez autenticado, serás llevado a la pantalla de inicio donde puedes:
+   - Probar la autenticación biométrica nuevamente
+   - Ver información sobre la aplicación
+   - Cerrar sesión
 
-# OR using Yarn
-yarn ios
-```
+## Funcionalidades
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### Verificación de biometría
+- Detecta automáticamente el tipo de biometría disponible
+- Muestra mensajes apropiados según el dispositivo
+- Maneja casos donde la biometría no está disponible
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+### Autenticación segura
+- Usa las APIs nativas de biometría
+- Maneja errores de autenticación
+- Proporciona feedback visual durante el proceso
 
-## Step 3: Modify your app
+### Interfaz de usuario
+- Diseño moderno y limpio
+- Estados de carga apropiados
+- Mensajes de error claros
+- Navegación intuitiva
 
-Now that you have successfully run the app, let's make changes!
+## Consideraciones de seguridad
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+- La aplicación usa las APIs nativas de biometría del sistema operativo
+- Las claves biométricas se crean automáticamente cuando es necesario
+- No se almacenan datos sensibles en la aplicación
+- Se siguen las mejores prácticas de seguridad de React Native
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## Troubleshooting
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+### La biometría no funciona en el simulador
+- Para iOS: Asegúrate de tener configurado Face ID o Touch ID en el simulador
+- Para Android: Usa un dispositivo físico o emulador con sensor de huella dactilar
 
-## Congratulations! :tada:
+### Errores de permisos
+- Verifica que los permisos estén correctamente configurados en el AndroidManifest.xml
+- Para iOS, asegúrate de que la aplicación tenga acceso a la biometría
 
-You've successfully run and modified your React Native App. :partying_face:
+### Errores de compilación
+- Limpia el proyecto: `cd android && ./gradlew clean && cd ..`
+- Para iOS: `cd ios && pod install && cd ..`
 
-### Now what?
+## Próximas mejoras
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+- [ ] Integración con React Navigation para navegación más compleja
+- [ ] Persistencia de estado de autenticación
+- [ ] Configuración de biometría
+- [ ] Logs de autenticación
+- [ ] Tests unitarios y de integración
 
-# Troubleshooting
+## Licencia
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Este proyecto es para fines educativos y de prueba.

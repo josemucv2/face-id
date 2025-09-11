@@ -5,24 +5,36 @@
  * @format
  */
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import React, { useState } from 'react';
+import { StatusBar, useColorScheme } from 'react-native';
+import { LoginScreen } from './src/screens/LoginScreen';
+import { HomeScreen } from './src/screens/HomeScreen';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+  };
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NewAppScreen templateFileName="App.tsx" />
-    </View>
+    <>
+      <StatusBar 
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'} 
+        backgroundColor={isDarkMode ? '#000000' : '#FFFFFF'}
+      />
+      {isAuthenticated ? (
+        <HomeScreen onLogout={handleLogout} />
+      ) : (
+        <LoginScreen onLoginSuccess={handleLoginSuccess} />
+      )}
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default App;
