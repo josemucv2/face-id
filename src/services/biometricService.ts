@@ -126,35 +126,27 @@ export class BiometricService {
    * Genera un token criptográfico usando biometría
    * Este es el token REAL que genera el dispositivo
    */
-  static async generateBiometricToken(payload: string = 'auth_request'): Promise<string | null> {
+  static async generateBiometricToken(nonce: string): Promise<string | null> {
     try {
-      console.log('🔐 Generando token criptográfico biométrico...');
-      console.log('   - Payload:', payload);
-      console.log('   - Timestamp:', new Date().toISOString());
-      console.log('   - Device ID:', this.getDeviceId());
- 
-      // Generar token real usando biometría
+      console.log('🔐 Generando firma biométrica...');
+      console.log('   - Nonce:', nonce);
+  
       const { success, signature } = await rnBiometrics.createSignature({
-        promptMessage: 'Autenticación requerida para generar token',
-        payload: payload,
-        cancelButtonText: 'Cancelar'
+        promptMessage: 'Autenticación requerida',
+        payload: nonce, // 👈 firmamos el nonce real
+        cancelButtonText: 'Cancelar',
       });
-
+  
       if (success && signature) {
-        console.log('✅ Token criptográfico generado exitosamente');
-        console.log('   - Signature length:', signature.length);
+        console.log('✅ Firma generada');
         console.log('   - Signature preview:', signature.substring(0, 20) + '...');
         return signature;
       } else {
-        console.error('❌ Error: No se pudo generar el token criptográfico');
+        console.error('❌ No se pudo generar la firma biométrica');
         return null;
       }
     } catch (error) {
-      console.error('❌ Error generating biometric token:', error);
-      console.log('🚨 Error details:');
-      console.log('   - Error type:', typeof error);
-      console.log('   - Error message:', error instanceof Error ? error.message : 'Unknown error');
- 
+      console.error('❌ Error generating biometric signature:', error);
       return null;
     }
   }
